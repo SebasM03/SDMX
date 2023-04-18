@@ -41,12 +41,12 @@ df["indicatorID"] = df["indicatorID"].astype(str)
 df["FLARID"] = df["FLARID"].astype(str)
 df["currentDate"] = df["currentDate"].astype(str)
 
-#Quitar estacion en los campos
+#Quitar espacios en los campos
 df["ID"] = df["indicatorID"].str.split(" ", n=1).str[0]
 df["refAreaID"] = df["refAreaID"].str.split(" ", n=1).str[0]
 df["timeFormatID"] = df["timeFormatID"].str.split(" ", n=1).str[0]
 df["FLARID"] = df["FLARID"].str.split(" ", n=1).str[0]
-df["Date"] = df["currentDate"].str.split(" ", n=1).str[0]
+
 
 
 root = ET.Element("MessageGroup", xmlns="https://flar.com/sie/")
@@ -60,7 +60,7 @@ for x, row in df.iterrows():
     test = ET.SubElement(header, "Test")
     test.text = "false"
     prepared = ET.SubElement(header, "Prepared")
-    prepared.text = str(row["Date"])
+    prepared.text = str(row["currentDate"])
     sender = ET.SubElement(header, "Sender", id=str(row["FLARID"]))
     name = ET.SubElement(sender, "Name", lang="es")
     name.text = "FLAR - Fondo LatinoAmericano de Reservas"
@@ -69,7 +69,7 @@ for x, row in df.iterrows():
     department.text = "Gerencia Tecnología y Estudios Económicos - FLAR"
     uri = ET.SubElement(contact, "URI", email=str(row["email"]))
     extracted = ET.SubElement(sender, "Extracted")
-    extracted.text = str(row["Date"])
+    extracted.text = str(row["currentDate"])
     
     dataset = ET.SubElement(root, "DataSet", action="Replace")
     series = ET.SubElement(dataset, "Series", freqID=str(row["freqID"]), refAreaID=str(row["refAreaID"]), timeFormat=str(row["timeFormatID"]), counterpartArea=str(row["counterpartArea"]), unit=str(row["unitID"]))
